@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.steelsty.networkinfo">
+    package="com.steelsty.spotme">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.steelsty.spotme.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,10 +31,10 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".NewAppWidget">
+        <receiver android:name="com.steelsty.spotme.NewAppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.steelsty.networkinfo.NewAppWidget.ACTION_CLICK" />
+                <action android:name="com.steelsty.spotme.NewAppWidget.ACTION_CLICK" />
             </intent-filter>
 
             <meta-data
@@ -43,7 +43,7 @@
         </receiver>
 
         <service
-            android:name=".WidgetService"
+            android:name="com.steelsty.spotme.WidgetService"
             android:enabled="true"
             android:exported="true" />
         <!--
@@ -59,7 +59,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name="com.steelsty.spotme.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
     </application>
 

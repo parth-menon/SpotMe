@@ -1,4 +1,4 @@
-package com.steelsty.networkinfo;
+package com.steelsty.spotme;
 
 import android.content.Context;
 import android.os.Build;

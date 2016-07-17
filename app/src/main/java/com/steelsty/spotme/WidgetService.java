@@ -1,4 +1,4 @@
-package com.steelsty.networkinfo;
+package com.steelsty.spotme;
 
 import android.Manifest;
 import android.app.Service;
@@ -12,7 +12,6 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
