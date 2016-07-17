@@ -69,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         }
-        else{
-            finish();
-        }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode,
