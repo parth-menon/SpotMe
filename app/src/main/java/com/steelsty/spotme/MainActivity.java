@@ -165,6 +165,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, "Share"));
                 return true;
+            case R.id.alarm:
+                Intent alarmIntent = new Intent(MainActivity.this,AlarmActivity.class);
+                startActivity(alarmIntent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
