@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(place).title(Globals.address));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
         if(running==false) {
             Toast.makeText(getApplicationContext(), "Getting Location", Toast.LENGTH_LONG).show();
             TelephonyManager tv = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);

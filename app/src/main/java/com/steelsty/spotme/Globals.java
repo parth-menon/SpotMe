@@ -12,6 +12,9 @@ public class Globals {
     public static int phone=0;
     public static int loc=0;
     public static double lat=0.0;
+    public static String city="";
+    public static String state="";
+    public static String place="";
     public static double lng=0.0;
     public static String address="";
     public static boolean check(Context c){

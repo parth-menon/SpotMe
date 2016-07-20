@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_alarm"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.steelsty.spotme.NewAlarm">
+
+    <Button
+        android:text="Find"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="100dp"
+        android:id="@+id/find"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="Place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginStart="52dp"
+        android:id="@+id/textView2"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_toEndOf="@+id/textView1" />
+
+    <TextView
+        android:text="Place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:id="@+id/textView1"
+        android:layout_alignBaseline="@+id/find"
+        android:layout_alignBottom="@+id/find"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="26dp" />
+
+    <TextView
+        android:text="Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:id="@+id/textView3"
+        android:textSize="20sp"
+        android:layout_below="@+id/find"
+        android:layout_alignStart="@+id/textView1" />
+
+    <TextView
+        android:text="Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:id="@+id/textView4"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/textView3" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/date"
+        android:inputType="none"
+        android:textIsSelectable="true"
+        android:layout_alignBaseline="@+id/textView4"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_alignStart="@+id/time" />
+
+    <Button
+        android:text="Set Alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="91dp"
+        android:id="@+id/setalarm"
+        style="@style/Widget.AppCompat.Button.Colored" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:textIsSelectable="true"
+        android:ems="10"
+        android:id="@+id/time"
+        android:layout_alignBaseline="@+id/textView3"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_toStartOf="@+id/find" />
+
+</RelativeLayout>
