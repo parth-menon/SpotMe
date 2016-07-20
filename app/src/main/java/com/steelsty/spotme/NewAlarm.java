@@ -37,6 +37,11 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
         setalarm=(Button) findViewById(R.id.setalarm);
         time=(EditText) findViewById(R.id.time);
         calendar = Calendar.getInstance();
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        min = calendar.get(Calendar.MINUTE);
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
         time.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -57,6 +62,8 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
                 return false;
             }
         });
+        showTime(hour,min);
+        showDate(year,month,day);
         find.setOnClickListener(this);
         setalarm.setOnClickListener(this);
     }
@@ -64,7 +71,9 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onResume() {
         super.onResume();
-        if(!(Globals.place.equals("") && Globals.city.equals("") && Globals.state.equals("")))
+        if(!(Globals.city.equals("") && Globals.state.equals("")))
+            placeTView.setText(Globals.city+",\n"+Globals.state);
+        else if(!(Globals.place.equals("") && Globals.city.equals("") && Globals.state.equals("")))
             placeTView.setText(Globals.place+",\n"+Globals.city+",\n"+Globals.state);
         else
             placeTView.setText("");
@@ -78,10 +87,15 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
                 startActivity(in);
                 break;
             case R.id.setalarm:
-                db.insertAlarm(placeTView.getText().toString(),time.getText().toString(),date.getText().toString(),1);
+                if(!placeTView.getText().equals(""))
+                {db.insertAlarm(db.alarmID(),placeTView.getText().toString(),time.getText().toString(),date.getText().toString(),1);
                 Globals.place=""; Globals.city=""; Globals.state="";
                 Toast.makeText(getApplicationContext(),"Alarm is set",Toast.LENGTH_LONG).show();
-                finish();
+                finish();}
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Fill all entries",Toast.LENGTH_LONG).show();
+                }
         }
     }
     @SuppressWarnings("deprecation")

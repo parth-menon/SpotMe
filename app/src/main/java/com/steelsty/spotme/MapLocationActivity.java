@@ -89,8 +89,12 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
                 city = addresses.get(0).getLocality();
                 state = addresses.get(0).getAdminArea();
                 place = addresses.get(0).getAddressLine(0);
-                String a[]=place.split(",");
-                place=a[(a.length)-1].trim();
+//                Log.e("address",place);
+                if(place.contains(state)||place.contains(city)){
+                    place="";
+                }else{
+                    String a[]=place.split(",");
+                    place=a[(a.length)-1].trim();}
                 ad=addresses.get(0);
             } catch (Exception e) {
                 e.printStackTrace();

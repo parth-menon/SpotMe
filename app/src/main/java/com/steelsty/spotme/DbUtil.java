@@ -20,17 +20,31 @@ public class DbUtil extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
-        String query= "create table Alarms(id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "place TEXT, " +
-                "time TEXT, " +
-                "date TEXT, " +
-                "active INTEGER)";
+        String query= "create table Alarms(id INTEGER PRIMARY KEY NOT NULL, " +
+                "place TEXT NOT NULL, " +
+                "time TEXT NOT NULL, " +
+                "date TEXT NOT NULL, " +
+                "active INTEGER NOT NULL)";
         db.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onCreate(db);
+    }
+
+    public int alarmID(){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT id FROM Alarms";
+        Cursor c = db.rawQuery(query, null);
+        int id=0;
+        if(c.getCount()!=0) {
+            c.moveToLast();
+            id =c.getInt(0);
+        }
+        c.close();
+        db.close();
+        return (id+1);
     }
 
     public int getAlarmCount() {
@@ -75,20 +89,21 @@ public class DbUtil extends SQLiteOpenHelper {
 //        return devId;
 //    }
 
-    public void insertAlarm(String place,String time,String date,int active){
+    public void insertAlarm(int id,String place,String time,String date,int active){
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try{
 
             String sql   =   "INSERT INTO Alarms "
-                    +  "VALUES(?,?,?,?)";
+                    +  "VALUES(?,?,?,?,?)";
 
             SQLiteStatement insertStmt      =   db.compileStatement(sql);
             insertStmt.clearBindings();
-            insertStmt.bindString(1,place);
-            insertStmt.bindString(2, time);
-            insertStmt.bindString(3,date);
-            insertStmt.bindLong(4, active);
+            insertStmt.bindLong(1,id);
+            insertStmt.bindString(2,place);
+            insertStmt.bindString(3, time);
+            insertStmt.bindString(4,date);
+            insertStmt.bindLong(5, active);
             insertStmt.executeInsert();
             db.setTransactionSuccessful();
         }catch(Exception e) {

@@ -1,5 +1,7 @@
 package com.steelsty.spotme;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,6 +33,8 @@ public class AlarmActivity extends AppCompatActivity {
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
     DbUtil db;
+    AlertDialog.Builder alertDialogBuilder;
+    int pos=0;
     String[] ids,places,time,date,active;
 
     @Override
@@ -46,6 +50,46 @@ public class AlarmActivity extends AppCompatActivity {
                 startActivity(in);
             }
         });
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+
+        try {
+            mRecyclerView.setHasFixedSize(true);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                pos=position;
+                alertDialogBuilder.show();
+            }
+            @Override
+            public void onLongClick(View view, int position) {
+            }
+        }));
+
+        alertDialogBuilder = new AlertDialog.Builder(AlarmActivity.this);
+        alertDialogBuilder.setTitle("Delete Alarm?");
+        alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.deleteAlarmsId(Integer.parseInt(ids[pos]));
+                onResume();
+                dialog.dismiss();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+
+        });
     }
 
     public interface ClickListener {
@@ -54,9 +98,7 @@ public class AlarmActivity extends AppCompatActivity {
         void onLongClick(View view, int position);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    void bind(){
         Vector<Vector<String>> va= db.getAlarms();
         int len =va.size();
         ids = new String[len];
@@ -71,29 +113,19 @@ public class AlarmActivity extends AppCompatActivity {
             time[i]=v.get(2);
             date[i]=v.get(3);
             active[i]=v.get(4);
-        }
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
-        try {
-            mRecyclerView.setHasFixedSize(true);
-        }catch (Exception e){
-            e.printStackTrace();
         }
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
         if(len!=0)
             mAdapter = new MyAdapter(places,time,date);
+        else
+            mAdapter = null;
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
+    }
 
-            }
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bind();
 
     }
 
