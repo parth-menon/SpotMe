@@ -1,11 +1,16 @@
 package com.steelsty.spotme;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -88,10 +93,28 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
                 break;
             case R.id.setalarm:
                 if(!placeTView.getText().equals(""))
-                {db.insertAlarm(db.alarmID(),placeTView.getText().toString(),time.getText().toString(),date.getText().toString(),1);
-                Globals.place=""; Globals.city=""; Globals.state="";
-                Toast.makeText(getApplicationContext(),"Alarm is set",Toast.LENGTH_LONG).show();
-                finish();}
+                {
+                    int id = db.alarmID();
+                    String p=placeTView.getText().toString(),t=time.getText().toString(),d=date.getText().toString();
+                    db.insertAlarm(id,p,t,d,1);
+                    Globals.place=""; Globals.city=""; Globals.state="";
+                    Toast.makeText(getApplicationContext(),"Alarm is set",Toast.LENGTH_LONG).show();
+                    Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                    alarmIntent.putExtra("id",id);
+                    PendingIntent pendingIntent =PendingIntent.getBroadcast(getApplicationContext(), id, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.SECOND,0);
+                    calendar.set(Calendar.MILLISECOND,0);
+                    calendar.set(Calendar.MINUTE,min);
+                    calendar.set(Calendar.HOUR_OF_DAY,hour);
+                    calendar.set(Calendar.DAY_OF_MONTH,day);
+                    calendar.set(Calendar.MONTH,month);
+                    calendar.set(Calendar.YEAR,year);
+//                    Log.e("Fetch Set for :",calendar.getTime().toString());
+                    manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                    finish();
+                }
                 else
                 {
                     Toast.makeText(getApplicationContext(),"Fill all entries",Toast.LENGTH_LONG).show();
@@ -136,10 +159,15 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
     };
 
     private void showDate(int year, int month, int day) {
+        this.year=year;
+        this.month=month;
+        this.day=day;
         date.setText(new StringBuilder().append(day).append("/")
                 .append(month).append("/").append(year));
     }
     private void showTime(int hours, int mins) {
+        this.hour=hours;
+        this.min=mins;
         String timeSet = "";
         if (hours > 12) {
             hours -= 12;

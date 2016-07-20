@@ -65,12 +65,25 @@
             android:name=".AlarmActivity"
             android:label="@string/title_activity_alarm"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-        <activity android:name=".NewAlarm"
+        <activity
+            android:name=".NewAlarm"
             android:label="New Alarm"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
-        <activity android:name=".MapLocationActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+        <activity
+            android:name=".MapLocationActivity"
             android:label="Select Address"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <receiver android:name=".AlarmReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".LockScreen"
+            android:showOnLockScreen="true"
+            android:screenOrientation="sensorPortrait" />
     </application>
 
 </manifest>

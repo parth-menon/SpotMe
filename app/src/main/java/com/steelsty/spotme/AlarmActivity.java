@@ -1,7 +1,9 @@
 package com.steelsty.spotme;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +26,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -78,7 +81,12 @@ public class AlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 db.deleteAlarmsId(Integer.parseInt(ids[pos]));
-                onResume();
+                bind();
+                if(active[pos].equals("1")){
+                    Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                    PendingIntent pendingIntent =PendingIntent.getBroadcast(getApplicationContext(), Integer.parseInt(ids[pos]), alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    manager.cancel(pendingIntent);}
                 dialog.dismiss();
             }
         });
