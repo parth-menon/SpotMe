@@ -69,8 +69,8 @@ public class AlarmService extends Service {
                 Globals.mcc = Integer.parseInt(networkOperator.substring(0, 3));
                 Globals.mnc = Integer.parseInt(networkOperator.substring(3));
             }
-                ATask k = new ATask();
-                k.execute();
+            ATask k = new ATask();
+            k.execute();
 
         }catch (Exception e){
             e.printStackTrace();
@@ -122,15 +122,26 @@ public class AlarmService extends Service {
                         String p=arr[0];
                         String c = arr[1].trim();
                         String s=arr[2].trim();
-                        Log.e("aaaa",p+" "+c+" "+s);
+                        if(s.equals(state)&&c.equals(city)&&(p.contains(area)||area.contains(p))){
+                            Intent i = new Intent(getApplicationContext(),LockScreen.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("id",id);
+                            db.setActive(id);
+                            startActivity(i);
+                        }
                     }
-                    else
-                    {
+                    else {
                         String c = arr[0].trim();
-                        String s=arr[1].trim();
-                        Log.e("aaaa",c+" "+s);
+                        String s = arr[1].trim();
+                        if (s.equals(state) && c.equals(city)) {
+                            Intent i = new Intent(getApplicationContext(), LockScreen.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("id",id);
+                            db.setActive(id);
+                            startActivity(i);
+                        }
                     }
-                    Intent in = new Intent(c,NewAppWidget.class);
+                    Intent in = new Intent(getApplicationContext(),NewAppWidget.class);
                     in.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                     int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewAppWidget.class));
                     in.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);

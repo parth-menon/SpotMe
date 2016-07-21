@@ -77,10 +77,13 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onResume() {
         super.onResume();
-        if(!(Globals.city.equals("") && Globals.state.equals("")))
-            placeTView.setText(Globals.city+",\n"+Globals.state);
-        else if(!(Globals.place.equals("") && Globals.city.equals("") && Globals.state.equals("")))
-            placeTView.setText(Globals.place+",\n"+Globals.city+",\n"+Globals.state);
+        if(!Globals.state.equals("") && !Globals.city.equals(""))
+        {
+            if (!Globals.place.equals(""))
+                placeTView.setText(Globals.place + ",\n" + Globals.city + ",\n" + Globals.state);
+            else
+                placeTView.setText(Globals.city + ",\n" + Globals.state);
+        }
         else
             placeTView.setText("");
     }

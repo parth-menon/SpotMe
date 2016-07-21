@@ -119,14 +119,21 @@ public class AlarmActivity extends AppCompatActivity {
         date = new String[len];
         active = new String[len];
         alarms=len;
-        for(int i=0;i<len;i++){
+        for(int i=0;i<len;){
             Vector<String> v = va.get(i);
-            ids[i]=v.get(0);
-            places[i]=v.get(1);
-            time[i]=v.get(2);
-            date[i]=v.get(3);
-            active[i]=v.get(4);
-
+            if(v.get(4).equals("0"))
+            {
+                db.deleteAlarmsId(Integer.parseInt(v.get(0)));
+            }
+            else
+            {
+                ids[i] = v.get(0);
+                places[i] = v.get(1);
+                time[i] = v.get(2);
+                date[i] = v.get(3);
+                active[i] = v.get(4);
+                i++;
+            }
         }
         if(len!=0)
             mAdapter = new MyAdapter(places,time,date);

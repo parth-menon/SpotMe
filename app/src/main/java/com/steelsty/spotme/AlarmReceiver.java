@@ -25,6 +25,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Vector;
 
 public class AlarmReceiver extends BroadcastReceiver {
     DbUtil db;
@@ -41,6 +42,20 @@ public class AlarmReceiver extends BroadcastReceiver {
         c=context;
         int id=intent.getIntExtra("id",0);
         Log.e("id",id+"");
+        Vector<String> v=db.alarm(id);
+        int active=Integer.parseInt(v.get(4));
+        if(active==1)
+        {
+            Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.SECOND,0);
+            calendar.set(Calendar.MILLISECOND,0);
+            calendar.add(Calendar.MINUTE,2);
+            Log.e("set",calendar.getTime().toString());
+            manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
 //        Intent i = new Intent(context,LockScreen.class);
 //        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        context.startActivity(i);

@@ -61,6 +61,34 @@ public class DbUtil extends SQLiteOpenHelper {
         return place;
     }
 
+    public void setActive(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "UPDATE Alarms SET active=0 where id=?";
+        SQLiteStatement insertStmt      =   db.compileStatement(query);
+        insertStmt.clearBindings();
+        insertStmt.bindLong(1,id);
+        insertStmt.executeUpdateDelete();
+        db.close();
+    }
+
+    public Vector<String> alarm(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM Alarms where id="+id;
+        Cursor c = db.rawQuery(query, null);
+        Vector<String> v = new Vector<String>();
+        if(c.getCount()!=0) {
+            c.moveToFirst();
+            v.add(0,c.getInt(0)+"");
+            v.add(1,c.getString(1));
+            v.add(2,c.getString(2));
+            v.add(3,c.getString(3));
+            v.add(4,c.getInt(4)+"");
+        }
+        c.close();
+        db.close();
+        return v;
+    }
+
     public int getAlarmCount() {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM Alarms";
