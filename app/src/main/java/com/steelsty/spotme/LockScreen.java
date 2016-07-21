@@ -10,6 +10,7 @@ import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,6 +26,7 @@ public class LockScreen extends AppCompatActivity {
     TextView tv;
     Button bt;
     DbUtil db;
+    int id=0;
     private Vibrator vibrator;
     private AudioManager audioManager;
     private Ringtone ringtone;
@@ -33,39 +35,47 @@ public class LockScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON|WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_lock_screen);
-        pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-        wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "");
-        wl.acquire();
-        tv =(TextView) findViewById(R.id.textViewPlace);
-        bt=(Button) findViewById(R.id.buttonCancel);
-        db = new DbUtil(this);
-        Vector<String> v =db.alarm(getIntent().getIntExtra("id",0));
-        tv.setText(v.get(1));
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            setContentView(R.layout.activity_lock_screen);
+        try {
+            pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "");
+            wl.acquire();
+            tv = (TextView) findViewById(R.id.textViewPlace);
+            bt = (Button) findViewById(R.id.buttonCancel);
+            db = new DbUtil(this);
+            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            id=getIntent().getIntExtra("id", 0);
+            Vector<String> v = db.alarm(id);
+            tv.setText(v.get(1));
+            bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.deleteAlarmsId(id);
+                    finish();
+                }
+            });
+            int volume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+            if (volume == 0)
+                volume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+            ringtone = RingtoneManager.getRingtone(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+            if (ringtone != null) {
+                ringtone.setStreamType(AudioManager.STREAM_ALARM);
+                ringtone.play();
+                isRinging = true;
             }
-        });
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int volume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
-        if(volume==0)
-            volume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
-        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume,AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-        ringtone = RingtoneManager.getRingtone(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
-        if(ringtone!=null) {
-            ringtone.setStreamType(AudioManager.STREAM_ALARM);
-            ringtone.play();
-            isRinging = true;
+
+            long[] pattern = {0, 1000, 2000};
+            vibrator.vibrate(pattern, 0);
         }
-        vibrator = (Vibrator) getSystemService (VIBRATOR_SERVICE);
-        long[] pattern = {0, 1000, 2000};
-        vibrator.vibrate(pattern,0);
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -77,7 +87,12 @@ public class LockScreen extends AppCompatActivity {
             ringtone.stop();
         if(ringtone!=null && ringtone.isPlaying())
             ringtone.stop();
-        vibrator.cancel();
+        try {
+            vibrator.cancel();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override

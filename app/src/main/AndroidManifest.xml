@@ -88,6 +88,7 @@
         <activity
             android:name=".LockScreen"
             android:showOnLockScreen="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:screenOrientation="sensorPortrait" />
     </application>
 

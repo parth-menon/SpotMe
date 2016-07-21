@@ -30,6 +30,7 @@ public class DeviceBootReceiver extends BroadcastReceiver {
                 int active=Integer.parseInt(v.get(4));
                 if (active == 1) {
                     Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+                    alarmIntent.putExtra("id",id);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                     AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     Calendar calendar = Calendar.getInstance();

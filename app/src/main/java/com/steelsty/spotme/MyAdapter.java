@@ -40,7 +40,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.placeTextView.setText(mDataset1[position]);
         holder.timeTextView.setText(mDataset2[position]);
-        holder.dateTextView.setText(mDataset2[position]);
+        holder.dateTextView.setText(mDataset3[position]);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

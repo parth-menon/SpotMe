@@ -64,6 +64,7 @@ public class AlarmService extends Service {
             Globals.cid = gc.getCid();
             Globals.lac = gc.getLac();
             id=intent.getIntExtra("id",0);
+            Log.e("id",id+"");
             String networkOperator = tv.getSimOperator();
             if (TextUtils.isEmpty(networkOperator) == false) {
                 Globals.mcc = Integer.parseInt(networkOperator.substring(0, 3));
@@ -201,5 +202,12 @@ public class AlarmService extends Service {
             }
             return d;
         }
+    }
+
+    @Override
+    public boolean stopService(Intent name) {
+        if(wl.isHeld())
+            wl.release();
+        return super.stopService(name);
     }
 }
