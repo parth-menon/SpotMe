@@ -47,6 +47,20 @@ public class DbUtil extends SQLiteOpenHelper {
         return (id+1);
     }
 
+    public String addressID(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT place FROM Alarms where id="+id;
+        Cursor c = db.rawQuery(query, null);
+        String place="";
+        if(c.getCount()!=0) {
+            c.moveToLast();
+            place =c.getString(0);
+        }
+        c.close();
+        db.close();
+        return place;
+    }
+
     public int getAlarmCount() {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM Alarms";

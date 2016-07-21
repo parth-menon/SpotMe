@@ -7,4 +7,24 @@
     android:background="@android:color/black"
     tools:context="com.steelsty.spotme.LockScreen">
 
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="141dp"
+        android:id="@+id/textViewPlace"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonCancel"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="159dp" />
 </RelativeLayout>

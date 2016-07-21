@@ -42,6 +42,7 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
         setalarm=(Button) findViewById(R.id.setalarm);
         time=(EditText) findViewById(R.id.time);
         calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE,1);
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         min = calendar.get(Calendar.MINUTE);
         year = calendar.get(Calendar.YEAR);
@@ -51,7 +52,7 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 hour = calendar.get(Calendar.HOUR_OF_DAY);
-                min = calendar.get(Calendar.MINUTE);
+                min =calendar.get(Calendar.MINUTE);
                 setTime(time);
                 return false;
             }

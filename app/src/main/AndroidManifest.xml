@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -47,6 +48,10 @@
 
         <service
             android:name=".WidgetService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".AlarmService"
             android:enabled="true"
             android:exported="true" />
         <!--

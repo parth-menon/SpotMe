@@ -36,6 +36,7 @@ public class AlarmActivity extends AppCompatActivity {
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
     DbUtil db;
+    int alarms=0;
     AlertDialog.Builder alertDialogBuilder;
     int pos=0;
     String[] ids,places,time,date,active;
@@ -67,7 +68,8 @@ public class AlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, final int position) {
                 pos=position;
-                alertDialogBuilder.show();
+                if(alarms!=0)
+                    alertDialogBuilder.show();
             }
             @Override
             public void onLongClick(View view, int position) {
@@ -81,12 +83,14 @@ public class AlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 db.deleteAlarmsId(Integer.parseInt(ids[pos]));
-                bind();
-                if(active[pos].equals("1")){
+                if(active[pos].equals("1"))
+                {
                     Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
                     PendingIntent pendingIntent =PendingIntent.getBroadcast(getApplicationContext(), Integer.parseInt(ids[pos]), alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                     AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                    manager.cancel(pendingIntent);}
+                    manager.cancel(pendingIntent);
+                }
+                bind();
                 dialog.dismiss();
             }
         });
@@ -114,6 +118,7 @@ public class AlarmActivity extends AppCompatActivity {
         time = new String[len];
         date = new String[len];
         active = new String[len];
+        alarms=len;
         for(int i=0;i<len;i++){
             Vector<String> v = va.get(i);
             ids[i]=v.get(0);
@@ -125,8 +130,12 @@ public class AlarmActivity extends AppCompatActivity {
         }
         if(len!=0)
             mAdapter = new MyAdapter(places,time,date);
-        else
-            mAdapter = null;
+        else {
+            String[] a={"No Alarms Set"};
+            String[] b={""};
+            String[] c={""};
+            mAdapter = new MyAdapter(a,b,c);
+        }
         mRecyclerView.setAdapter(mAdapter);
     }
 

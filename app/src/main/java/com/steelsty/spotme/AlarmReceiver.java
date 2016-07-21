@@ -39,10 +39,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
         c=context;
-        Log.e("id",intent.getIntExtra("id",0)+"");
-        Intent i = new Intent(context,LockScreen.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
+        int id=intent.getIntExtra("id",0);
+        Log.e("id",id+"");
+//        Intent i = new Intent(context,LockScreen.class);
+//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        context.startActivity(i);
+        Intent ser=new Intent(context,AlarmService.class);
+        ser.putExtra("id",id);
+        context.startService(ser);
         wl.release();
     }
 }
