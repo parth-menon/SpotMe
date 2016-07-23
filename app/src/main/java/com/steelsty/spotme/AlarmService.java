@@ -19,6 +19,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -102,15 +104,19 @@ public class AlarmService extends Service {
                 if(!result.equals("")) {
                     String addr=db.addressID(id);
                     String arr[]=addr.split(",");
-
+                    LatLng l = db.latlngID(id);
 
                     String data[] = result.split(",");
                     Geocoder geocoder;
                     List<Address> addresses;
                     geocoder = new Geocoder(c, Locale.getDefault());
-                    addresses = geocoder.getFromLocation(Double.parseDouble(data[0]), Double.parseDouble(data[1]), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                    Globals.lat=Double.parseDouble(data[0]);
-                    Globals.lng= Double.parseDouble(data[1]);
+                    double lat,lng;
+                    lat=Double.parseDouble(data[0]);
+                    lng= Double.parseDouble(data[1]);
+                    addresses = geocoder.getFromLocation(lat,lng, 1);
+                    Globals.lat=lat;
+                    Globals.lng= lng;
+
                     String city = addresses.get(0).getLocality();
                     String state = addresses.get(0).getAdminArea();
                     String area = addresses.get(0).getAddressLine(0);
@@ -123,12 +129,15 @@ public class AlarmService extends Service {
                         String p=arr[0];
                         String c = arr[1].trim();
                         String s=arr[2].trim();
-                        if(s.equals(state)&&c.equals(city)&&(p.contains(area)||area.contains(p))){
-                            Intent i = new Intent(getApplicationContext(),LockScreen.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("id",id);
-                            db.setActive(id);
-                            startActivity(i);
+                        if(s.equals(state)&&c.equals(city)){
+                            if(getDistance(lat,lng,l.latitude,l.longitude)<=2.0)
+                            {
+                                Intent i = new Intent(getApplicationContext(), LockScreen.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                i.putExtra("id", id);
+                                db.setActive(id);
+                                startActivity(i);
+                            }
                         }
                     }
                     else {
@@ -203,9 +212,8 @@ public class AlarmService extends Service {
             return d;
         }
     }
-    
-    private double getDistance(double lat1, double lat2, double lon1,
-                               double lon2)
+
+    private double getDistance(double lat1, double lon1, double lat2, double lon2)
     {
         double R = 6371;
         double dLat = Math.toRadians(lat2 - lat1);
@@ -216,7 +224,7 @@ public class AlarmService extends Service {
                 * Math.cos(dLat1) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double d = R * c;
-        return d * 1000;
+        return d;
     }
 
     @Override

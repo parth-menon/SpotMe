@@ -14,6 +14,7 @@ public class Globals {
     public static double lat=0.0;
     public static String city="";
     public static String state="";
+    public static String templat="",templng="";
     public static String place="";
     public static double lng=0.0;
     public static String address="";

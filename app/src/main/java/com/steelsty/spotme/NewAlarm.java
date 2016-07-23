@@ -99,9 +99,9 @@ public class NewAlarm extends AppCompatActivity implements View.OnClickListener 
                 if(!placeTView.getText().equals(""))
                 {
                     int id = db.alarmID();
-                    String p=placeTView.getText().toString(),t=time.getText().toString(),d=date.getText().toString();
-                    db.insertAlarm(id,p,t,d,1);
-                    Globals.place=""; Globals.city=""; Globals.state="";
+                    String p=placeTView.getText().toString(),t=time.getText().toString(),d=date.getText().toString(),tlat=Globals.templat,tlon=Globals.templng;
+                    db.insertAlarm(id,p,t,d,tlat,tlon,1);
+                    Globals.place=""; Globals.city=""; Globals.state="";Globals.templng="";Globals.templng="";
                     Toast.makeText(getApplicationContext(),"Alarm is set",Toast.LENGTH_LONG).show();
                     Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
                     alarmIntent.putExtra("id",id);

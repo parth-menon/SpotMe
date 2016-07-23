@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Vector;
 
 public class DbUtil extends SQLiteOpenHelper {
@@ -24,6 +26,8 @@ public class DbUtil extends SQLiteOpenHelper {
                 "place TEXT NOT NULL, " +
                 "time TEXT NOT NULL, " +
                 "date TEXT NOT NULL, " +
+                "lat TEXT NOT NULL," +
+                "lng TEXT NOT NULL," +
                 "active INTEGER NOT NULL)";
         db.execSQL(query);
     }
@@ -61,6 +65,22 @@ public class DbUtil extends SQLiteOpenHelper {
         return place;
     }
 
+    public LatLng latlngID(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT lat,lng FROM Alarms where id="+id;
+        Cursor c = db.rawQuery(query, null);
+        LatLng l=new LatLng(Globals.lat,Globals.lng);
+        if(c.getCount()!=0) {
+            c.moveToLast();
+            double lat =Double.parseDouble(c.getString(0));
+            double lng=Double.parseDouble(c.getString(1));
+            l= new LatLng(lat,lng);
+        }
+        c.close();
+        db.close();
+        return l;
+    }
+
     public void setActive(int id){
         SQLiteDatabase db = getWritableDatabase();
         String query = "UPDATE Alarms SET active=0 where id=?";
@@ -82,7 +102,7 @@ public class DbUtil extends SQLiteOpenHelper {
             v.add(1,c.getString(1));
             v.add(2,c.getString(2));
             v.add(3,c.getString(3));
-            v.add(4,c.getInt(4)+"");
+            v.add(4,c.getInt(6)+"");
         }
         c.close();
         db.close();
@@ -111,33 +131,13 @@ public class DbUtil extends SQLiteOpenHelper {
         db.close();
     }
 
-//    public String getDevID(){
-//        String devId="";
-//        SQLiteDatabase db = getWritableDatabase();
-//        String sql = "SELECT device_encrypt_key from StoreDevice";
-//        Cursor c = db.rawQuery(sql, null);
-//        try
-//        {
-//            if(c.moveToFirst())
-//            {
-//                devId=c.getString(0);
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }finally {
-//            c.close();
-//            db.close();
-//        }
-//        return devId;
-//    }
-
-    public void insertAlarm(int id,String place,String time,String date,int active){
+    public void insertAlarm(int id,String place,String time,String date,String lat,String lng,int active){
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try{
 
             String sql   =   "INSERT INTO Alarms "
-                    +  "VALUES(?,?,?,?,?)";
+                    +  "VALUES(?,?,?,?,?,?,?)";
 
             SQLiteStatement insertStmt      =   db.compileStatement(sql);
             insertStmt.clearBindings();
@@ -145,7 +145,9 @@ public class DbUtil extends SQLiteOpenHelper {
             insertStmt.bindString(2,place);
             insertStmt.bindString(3, time);
             insertStmt.bindString(4,date);
-            insertStmt.bindLong(5, active);
+            insertStmt.bindString(5,lat);
+            insertStmt.bindString(6,lng);
+            insertStmt.bindLong(7, active);
             insertStmt.executeInsert();
             db.setTransactionSuccessful();
         }catch(Exception e) {
@@ -173,7 +175,7 @@ public class DbUtil extends SQLiteOpenHelper {
                 vectObj.add(c.getString(1));
                 vectObj.add(c.getString(2));
                 vectObj.add(c.getString(3));
-                vectObj.add(c.getLong(4)+"");
+                vectObj.add(c.getLong(6)+"");
                 vectData.add(vectObj);
             }
             c.close();

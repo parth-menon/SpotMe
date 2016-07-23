@@ -37,7 +37,7 @@ import java.util.Locale;
 
 public class MapLocationActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, View.OnClickListener {
     EditText ed;
-    String city="",state="",place="";
+    String city="",state="",place="",templat="",templng="";
     Button find;
     GoogleMap mMap;
     @Override
@@ -74,6 +74,8 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
         Globals.city = city;
         Globals.state = state;
         Globals.place=place;
+        Globals.templat=templat;
+        Globals.templng = templng;
         finish();
     }
 
@@ -90,7 +92,7 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
                 state = addresses.get(0).getAdminArea();
                 place = addresses.get(0).getAddressLine(0);
                 Log.e("address",place);
-                if(place.contains(state)||place.contains(city)){
+                if(place.contains(state) && place.contains(city)){
                     place="";
                 }else
                 {
@@ -109,6 +111,8 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
         protected void onPostExecute(Address result) {
             try {
                 mMap.clear();
+                templat=result.getLatitude()+"";
+                templng=result.getLongitude()+"";
                 LatLng la =new LatLng(result.getLatitude(),result.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(la).title("Select"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(la));
