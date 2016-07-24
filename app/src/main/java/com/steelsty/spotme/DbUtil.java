@@ -15,7 +15,7 @@ import java.util.Vector;
 
 public class DbUtil extends SQLiteOpenHelper {
     public DbUtil(Context context) {
-        super(context, "SpotMe.db", null, 1);
+        super(context, "SpotMe.db", null,2);
         // TODO Auto-generated constructor stub
     }
 
@@ -34,6 +34,8 @@ public class DbUtil extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS Alarms");
+        db.close();
         onCreate(db);
     }
 
