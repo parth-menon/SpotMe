@@ -16,10 +16,7 @@ public class DeviceBootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            /* Setting the alarm here */
-
             DbUtil db = new DbUtil(context);
-
             Vector<Vector<String>> vo=db.getAlarms();
             int len=vo.size();
             for(int i=0;i<len;i++) {
@@ -55,7 +52,6 @@ public class DeviceBootReceiver extends BroadcastReceiver {
                     day=Integer.parseInt(temp[0]);
                     month=Integer.parseInt(temp[1]);
                     year=Integer.parseInt(temp[2]);
-
                     calendar.set(Calendar.SECOND,0);
                     calendar.set(Calendar.MILLISECOND, 0);
                     calendar.set(Calendar.HOUR_OF_DAY,hr);

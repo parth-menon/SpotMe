@@ -52,6 +52,7 @@ public class MapLocationActivity extends AppCompatActivity implements OnMapReady
         find.setOnClickListener(this);
 
     }
+    
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnInfoWindowClickListener(this);
